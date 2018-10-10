@@ -39,11 +39,6 @@ void onMessage(const RequestPtr& request, const ResponsePtr& response)
 		Json::Reader reader;
 		reader.parse(utility::UTF8_To_GBK(utf8Str), root);
 		cout << utf8Str << endl;
-
-		ofstream fout;           
-		fout.open("yason_log.txt");  
-		fout << utf8Str << endl;  
-		fout.close();           
 	}
 	else
 	{
@@ -112,13 +107,14 @@ void testCase3(bool isImmediate = false)
 }
 
 //POST
-void testCase4(bool isImmediate = false)
+void testCase4(string url, bool isImmediate = false)
 {
 	RequestPtr request = make_shared<HttpRequest>();
 	request->setRequestType(HttpRequest::Type::POST);
-	request->setUrl("http://httpbin.org/post");
+	request->setUrl(url);
 	request->setCallback(onMessage);
-	request->setRequestData("visitor=zhangkuo&time=20171103");
+	//request->setRequestData("visitor=zhangkuo&time=20171103");
+	request->setRequestData("post client http body test01");
 	if (isImmediate)
 	{
 		request->setTag("test case 4: POST immediate");
@@ -243,13 +239,10 @@ void testAllCase()
 
 int main(int argc, char *argv[])
 {	
-	cout << "ÇëÊäÈëÉè±¸ip:";
-	string imput;
-	cin >> imput;
-	//testAllCase();
-	char* str = argv[0];
-	testCase1(imput);
+	string url = "localhost:2000";
+	//testCase1(url);// GET
+	testCase4(url);// POST
 
 	getchar();
-	getchar();
+	return 0;
 }
